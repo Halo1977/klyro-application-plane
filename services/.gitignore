@@ -1,0 +1,6 @@
+venv_ap/
+__pycache__/
+*.py[cod]
+db.sqlite3
+.DS_Store
+.env

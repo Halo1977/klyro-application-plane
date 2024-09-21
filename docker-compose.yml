@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  application_backend:
+    build:
+      context: .
+      dockerfile: docker/services/Dockerfile
+    volumes:
+      - ./services/:/app/services/
+    ports:
+      - "8001:8001"
+    depends_on:
+      - application_postgres
+    environment:
+      - DJANGO_SETTINGS_MODULE=klyro_application_plane.settings
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8001"
+
+  application_postgres:
+    image: postgres:13
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_DB=application_plane_db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5433:5432"
+
+volumes:
+  postgres_data:
